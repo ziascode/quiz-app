@@ -1,10 +1,10 @@
 "use client"; // Ensures it's a client component
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useEffect, useState } from "react";
+// import { useRouter } from "next/navigation";
 
 export default function IframePage() {
-  const router = useRouter();
+  // const router = useRouter();
  
 
   return (

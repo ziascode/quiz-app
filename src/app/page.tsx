@@ -1,16 +1,23 @@
 "use client";
 
+type Question = {
+  question: string;
+  options: string[];
+  correct: string | string[];
+};
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const shuffleArray = (array) => {
-  let shuffled = [...array];
+
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
-};
+}
 
 export default function Quiz() {
   const router = useRouter();
@@ -18,8 +25,8 @@ export default function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [selectedQuestions, setSelectedQuestions] = useState([]);
-  const [feedback, setFeedback] = useState(null);
+  const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   const questions = [
     
@@ -193,7 +200,7 @@ export default function Quiz() {
     return <p>Loading...</p>;
   }
 
-  const handleAnswer = (option) => {
+  const handleAnswer = (option: string)  => {
     const correctAnswer = selectedQuestions[currentQuestion].correct;
     const isCorrect = Array.isArray(correctAnswer)
       ? correctAnswer.includes(option)
