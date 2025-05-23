@@ -1,8 +1,10 @@
-"use client";
+"use client"; // Ensures this is a client component (Next.js App Router)
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Correct import for App Router
 
+
+// Fisher-Yates Shuffle Algorithm
 const shuffleArray = (array) => {
   let shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -19,7 +21,6 @@ export default function Quiz() {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
-  const [feedback, setFeedback] = useState(null);
 
   const questions = [
     
@@ -64,14 +65,24 @@ export default function Quiz() {
       "correct": "Stop"
     },
     {
-      "question": "How many times do you have to pray in a day?",
+      "question": "What 2 things does a person lose if he/she misses Asr salah intentionally?",
       "options": [
-        "6",
-        "3",
-        "5",
-        "10"
+        "Friends",
+        "Family",
+        "Property",
+        "Time"
       ],
-      "correct": ["5"]
+      "correct": ["Family", "Property"]
+    },
+    {
+      "question": "What is Az-Zaqqum?",
+      "options": [
+        "Food for the people of hellfire",
+        "Drink for the people of hellfire",
+        "Home for the people of hellfire",
+        "Clothes for the people of hellfire"
+      ],
+      "correct": "Food for the people of hellfire"
     },
     {
       "question": "What is Sidrat al-Muntaha?",
@@ -94,6 +105,36 @@ export default function Quiz() {
       "correct": "Brothers"
     },
     {
+      "question": "Which 2 surahs are for seeking protection in Allah from evil-eye & witchcraft?",
+      "options": [
+        "Surah Yaseen",
+        "Surah Falaq",
+        "Surah Ikhlas",
+        "Surah Naas"
+      ],
+      "correct": ["Surah Falaq", "Surah Naas"]
+    },
+    {
+      "question": "Which of the following is not an example of Major Shirk?",
+      "options": [
+        "Asking help from a Prophet",
+        "Going to a pious person’s grave for blessings",
+        "Denying Allah & His religion",
+        "Showing off"
+      ],
+      "correct": "Showing off"
+    },
+    {
+      "question": "What does Allah’s name Al-Mu’izz mean?",
+      "options": [
+        "The One who dishonours",
+        "The One who will judge",
+        "The One who honours",
+        "The One who sees it all"
+      ],
+      "correct": "The One who honours"
+    },
+    {
       "question": "Which is not one of the rights of a Muslim upon another Muslim?",
       "options": [
         "If one invites, you accept it",
@@ -104,14 +145,14 @@ export default function Quiz() {
       "correct": "If one asks for money, you give"
     },
     {
-      "question": "Who is the first prophet?",
+      "question": "Which Surah is referred as the oft-repeating verses Surah?",
       "options": [
-        "Prophet Yunis",
-        "Prophet Adam",
-        "Prophet Ibrahim",
-        "Prophet Isa"
+        "Surah Ikhlas",
+        "Surah Fatihah",
+        "Surah Naas",
+        "Surah Rahman"
       ],
-      "correct": "Prophet Adam"
+      "correct": "Surah Fatihah"
     },
     {
       "question": "Who will get their book of deeds in the right hand on the day of judgment?",
@@ -122,6 +163,16 @@ export default function Quiz() {
         "The people of Dunya"
       ],
       "correct": "The people of Jannah"
+    },
+    {
+      "question": "How did Abu Hurairah (RA) stop forgetting and had an amazing memory?",
+      "options": [
+        "He drank Zam Zam water",
+        "The Prophet (ﷺ) made dua for him",
+        "He wrote everything down",
+        "He revised constantly"
+      ],
+      "correct": "The Prophet (ﷺ) made dua for him"
     },
     {
       "question": "Which Angel will blow the horn to signal the Day of Judgement?",
@@ -142,6 +193,16 @@ export default function Quiz() {
         "Uthman ibn Affan (RA)"
       ],
       "correct": "Ali ibn Abi Talib (RA)"
+    },
+    {
+      "question": "Why does Allah allow suffering to happen?",
+      "options": [
+        "To punish the disbelievers",
+        "To test the believers",
+        "To remind people of His power",
+        "All of the above"
+      ],
+      "correct": "All of the above"
     },
     {
       "question": "At what age does a person become an adult in Islam?",
@@ -165,72 +226,60 @@ export default function Quiz() {
     }
   
   
-];  
+];
 
   useEffect(() => {
-    console.log("Mounted useEffect running...");
+    setMounted(true);
 
-    if (questions.length === 0) {
-      console.error("No questions found!");
-      return;
-    }
+    
 
-    const selected = shuffleArray(questions)
-      .slice(0, 5)
-      .map((q) => ({
-        ...q,
-        options: shuffleArray(q.options),
-      }));
-
-    console.log("Selected questions:", selected);
+    // Select 5 random questions & shuffle their options
+    const selected = shuffleArray(questions).slice(0, 5).map((q) => ({
+      ...q,
+      options: shuffleArray(q.options), // Shuffle options for each question
+    }));
 
     setSelectedQuestions(selected);
-    setMounted(true);
   }, []);
 
-  if (!mounted || selectedQuestions.length === 0) {
-    console.log("Still loading...", { mounted, selectedQuestions });
-    return <p>Loading...</p>;
-  }
+  if (!mounted || selectedQuestions.length === 0) return <p>Loading...</p>;
 
   const handleAnswer = (option) => {
-    const correctAnswer = selectedQuestions[currentQuestion].correct;
-    const isCorrect = Array.isArray(correctAnswer)
-      ? correctAnswer.includes(option)
-      : option === correctAnswer;
-
-    if (isCorrect) setScore(score + 1);
-    setFeedback(isCorrect ? "Correct!" : "Incorrect.");
-
-    setTimeout(() => {
-      setFeedback(null);
-      if (currentQuestion + 1 < selectedQuestions.length) {
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        setFinished(true);
-        setTimeout(() => {
-          router.push("/iframe");
-        }, 3000);
+    if (Array.isArray(selectedQuestions[currentQuestion].correct)) {
+      if (selectedQuestions[currentQuestion].correct.includes(option)) {
+        setScore(score + 1);
       }
-    }, 1500);
+    } else {
+      if (option === selectedQuestions[currentQuestion].correct) {
+        setScore(score + 1);
+      }
+    }
+
+    if (currentQuestion + 1 < selectedQuestions.length) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setFinished(true);
+      setTimeout(() => {
+        router.push("/iframe"); // ✅ Redirect to iframe after showing score
+      }, 3000);
+    }
   };
 
   return (
-    <div className="bg-clouds-animation min-h-screen flex items-center justify-center bg-birds-animation p-6 relative overflow-hidden">
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="cloud cloud-1"></div>
-        <div className="cloud cloud-2"></div>
-        <div className="cloud cloud-3"></div>
-        <div className="cloud cloud-4"></div>
-        <div className="cloud cloud-5"></div>
-        
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0a192f] to-[#1c3a63] p-6 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="shooting-stars-container">
+          <div className="shooting-star"></div>
+          <div className="shooting-star"></div>
+          <div className="shooting-star"></div>
+          <div className="shooting-star"></div>
+          <div className="shooting-star"></div>
+        </div>
       </div>
 
       <div className="flex flex-col items-center">
-        <h1 className="text-6xl font-semibold text-white py-6">Islamic Trivia</h1>
-        <h2 className="mb-5 font-semibold">Complete this quiz for a chance to win a kaaba Kiwa Quran</h2>
-        {/* <div className="relative bg-black/40 backdrop-blur-lg border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-xl text-center text-white"> */}
-        <div className="relative bg-black/40  border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-xl text-center text-white">
+        <h1 className="text-6xl font-semibold text-blue-100 py-6">Ramadan Trivia</h1>
+        <div className="relative bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-xl text-center text-white">
           {finished ? (
             <div>
               <h2 className="text-2xl font-semibold text-yellow-400">Quiz Completed! 🎉</h2>
@@ -249,17 +298,12 @@ export default function Quiz() {
                   <button
                     key={index}
                     onClick={() => handleAnswer(option)}
-                    className="block w-full bg-yellow-500 text-slate-800 text-lg font-medium py-3 px-6 rounded-lg shadow-md hover:bg-yellow-400 transition duration-200"
+                    className="block w-full bg-yellow-500 text-white text-lg font-medium py-3 px-6 rounded-lg shadow-md hover:bg-yellow-400 transition duration-200"
                   >
                     {option}
                   </button>
                 ))}
               </div>
-              {feedback && (
-                <p className={`mt-4 text-lg font-semibold ${feedback === "Correct!" ? "text-green-400" : "text-red-400"}`}>
-                  {feedback}
-                </p>
-              )}
             </div>
           )}
         </div>

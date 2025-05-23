@@ -14,13 +14,80 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #dddddd;
+    --foreground: #0f0f0f;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Sky background */
+.bg-clouds-animation {
+  background: url('https://pennyappeal.ca/wp-content/uploads/2025/04/bg3.jpg');
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+}
+
+/* General cloud style */
+.cloud {
+  position: absolute;
+  background: url('https://pennyappeal.ca/wp-content/uploads/2025/04/cloud.png') no-repeat center/contain;
+  opacity: 0.7;
+  animation: moveClouds linear infinite;
+  background-size: contain;
+}
+
+/* Individual clouds with unique size and animation settings */
+.cloud-1 {
+  width: 280px;
+  height: 200px;
+  top: 12%;
+  left: -250px;
+  animation-duration: 55s;
+  animation-delay: 0s;
+}
+
+.cloud-2 {
+  width: 350px;
+  height: 260px;
+  top: 22%;
+  left: -600px;
+  animation-duration: 65s;
+  animation-delay: 5s;
+}
+
+.cloud-3 {
+  width: 220px;
+  height: 160px;
+  top: 35%;
+  left: -900px;
+  animation-duration: 70s;
+  animation-delay: 7s;
+}
+
+.cloud-4 {
+  width: 450px;
+  height: 220px;
+  top: 50%;
+  left: -1200px;
+  animation-duration: 80s;
+  animation-delay: 20s;
+}
+
+.cloud-5 {
+  width: 260px;
+  height: 180px;
+  top: 65%;
+  left: -1500px;
+  animation-duration: 75s;
+  animation-delay: 30s;
+}
+
+/* Animation Keyframes */
+@keyframes moveClouds {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(200vw);
+  }
 }
